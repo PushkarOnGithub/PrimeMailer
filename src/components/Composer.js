@@ -16,6 +16,7 @@ const Composer = () => {
 
   const bold = () => {
     const {start, end} = selectedText();
+    if(start === end){return;}
     let formattedText = `${text.slice(0, start)}**${text.slice(start, end)}**${text.slice(end)}`;
     const boldRegExp = new RegExp("[A-Za-z]{0,}[*]{2}[A-Za-z]{0,}[*]{2}[A-Za-z]{0,}")
     const mat = formattedText.match(boldRegExp)
@@ -27,6 +28,7 @@ const Composer = () => {
 
   const italic = () => {
     const {start, end} = selectedText();
+    if(start === end){return;}
     const formattedText = `${text.slice(0, start)}_${text.slice(start, end)}_${text.slice(end)}`;
     setText(formattedText);
   }

@@ -1,24 +1,24 @@
 const connectToMongo = require("./db");
 const express = require("express");
-// var cors = require('cors')
+var cors = require("cors");
 
 connectToMongo();
 
 const app = express();
 const port = 5000;
 
-// app.use(cors())
+app.use(cors());
 app.use(express.json());
 
 //Available Routes
 // app.use("/api/mails", require('./routes/mails.js'))
-app.use('/oauth2callback', require('./routes/google_redirect.js'));
-app.use('/api/auth/signup', require('./routes/signup.js'));
-app.use("/api/auth/login", require('./routes/login.js'))
+app.use("/oauth2callback", require("./routes/google_redirect.js"));
+app.use("/api/auth/signup", require("./routes/signup.js"));
+app.use("/api/auth/login", require("./routes/login.js"));
 
 // app.get('/', (req, res) => {
-  //   res.send('Hello Pushkar')
-  // })
+//   res.send('Hello Pushkar')
+// })
 
 // window.open(
 //   url, "_blank");
@@ -52,7 +52,6 @@ app.use("/api/auth/login", require('./routes/login.js'))
 //   pyshell.send(objJsonStr)
 //   console.log(objJsonStr)
 // }, 1000);
-
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

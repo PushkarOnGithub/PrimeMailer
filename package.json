@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bcryptjs": "^2.4.3",
+    "concurrently": "^8.2.0",
     "csv-generate": "^4.2.6",
     "csv-parse": "^5.4.0",
     "csv-stringify": "^6.4.0",

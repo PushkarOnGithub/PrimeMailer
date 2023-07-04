@@ -1,16 +1,30 @@
 import React, { useContext } from "react";
 import { themecontext } from "../contexts/themeState";
 import { Link } from "react-router-dom";
-
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const { theme, setTheme } = useContext(themecontext);
+  let location = useLocation();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem('authToken')
+    localStorage.removeItem('name')
+    localStorage.removeItem('picture')
+    navigate('/')
+  }
   return (
     <>
-      <nav className={`navbar navbar-expand-lg navbar-${theme} bg-${theme}`}>
+      <nav className={`navbar navbar-expand-lg navbar-${"dark"} bg-${"dark"}`}>
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
-          <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24" className="d-inline-block align-text-top"/>
+          <Link className="navbar-brand " to="/" style={{ fontSize: "30px" }}>
+            <img
+              src="/docs/5.0/assets/brand/bootstrap-logo.svg"
+              alt=""
+              width="30"
+              height="24"
+              className="d-inline-block align-text-top"
+            />
             PrimeMailer
           </Link>
           <button
@@ -26,12 +40,43 @@ const Navbar = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <Link className="nav-link active" aria-current="page" to="/">
+                <Link
+                  className={`nav-link ${
+                    location.pathname === "/mails" ? "active" : ""
+                  }`}
+                  aria-current="page"
+                  to="/mails">
                   Mails
                 </Link>
               </li>
+              <li className={`"nav-item" ${localStorage.getItem('authToken') ? "d-none": ""}`} >
+                <Link
+                  className={`nav-link ${
+                    location.pathname === "/login" ? "active" : ""
+                  }`}
+                  aria-current="page"
+                  to="/login"
+                  
+                  >
+                  Login
+                </Link>
+              </li>
+              <li className={`"nav-item" ${localStorage.getItem('authToken') ? "d-none": ""}`}>
+                <Link
+                  className={`nav-link ${
+                    location.pathname === "/signup" ? "active" : ""
+                  }`}
+                  aria-current="page"
+                  to="/signup">
+                  Signup
+                </Link>
+              </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/">
+                <Link
+                  className={`nav-link ${
+                    location.pathname === "/about" ? "active" : ""
+                  }`}
+                  to="/about">
                   About
                 </Link>
               </li>
@@ -43,12 +88,12 @@ const Navbar = () => {
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false">
-                  Your Account
+                  {`Welcome ${localStorage.getItem('name')?localStorage.getItem('name')[0].toUpperCase()+localStorage.getItem('name').slice(1):""}`}
                 </Link>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <Link className="dropdown-item" to="/">
-                      Login/Logout
+                  <li className={!localStorage.getItem('authToken') ? "d-none": ""}>
+                    <Link className="dropdown-item" onClick={handleLogout}>
+                      Logout
                     </Link>
                   </li>
                   <li>

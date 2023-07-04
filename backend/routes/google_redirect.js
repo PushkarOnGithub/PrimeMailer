@@ -15,11 +15,11 @@ const scopes = [
   'https://www.googleapis.com/auth/userinfo.profile'
 ];
 
-const url = oauth2Client.generateAuthUrl({
-access_type: 'offline',
-scope: scopes
-});
-console.log(url)
+// const url = oauth2Client.generateAuthUrl({
+// access_type: 'offline',
+// scope: scopes
+// });
+// console.log(url)
 
 const getUserProfile = async(tokens) => {
   try {
