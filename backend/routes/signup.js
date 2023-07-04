@@ -9,6 +9,11 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = "helloU$er";
 const { google } = require("googleapis");
 let oauth2Client = require("../oauth2Client.js");
+const OTPs = require("../models/OTPs");
+
+const SixDigitRandomNumber = () => {
+  return Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
+};
 
 router.post(
   "/credentials",
@@ -25,31 +30,87 @@ router.post(
     }
     // Check weather the user with the email exists already.
     try {
-      let user = await User.findOne({ email: req.body.email });
+      const email = req.body.email;
+      let user = await User.findOne({ email: email });
       if (user) {
         return res
           .status(400)
           .json({ success: false, error: "Email already Registered" });
       }
-      const salt = await bcrypt.genSalt(10);
-      const secPass = await bcrypt.hash(req.body.password, salt);
+      if (!req.body.OTP) {
+        const OTP = SixDigitRandomNumber();
+        const { PythonShell } = require("python-shell");
+        let pyshell = new PythonShell(
+          "C:\\Users\\pushk\\React Projects\\primemailer\\backend\\routes\\python\\sendtestmail.py",
+          { mode: "text", pythonOptions: ["-u"] }
+        );
+        pyshell.on("message", (message) => {
+          console.log(message);
+          if (message == "Invalid Email") {
+            return res
+              .status(400)
+              .json({ success: false, error: "Invalid Email" });
+          }
+          else if(message == "Sent"){
+            return res.status(200).json({success: true, message: "OTP Sent"})
+          }
+          else if(message == "OTP not sent"){
+            return res.json(400).json({success: false, error: "OTP not sent"})
+          }
+        });
+        pyshell.on("stderr", (stderr) => {
+          console.log(stderr);
+          return res
+            .status(500)
+            .json({ success: false, error: "internal server error" });
+        });
+        pyshell.send(OTP);
+        pyshell.send(email);
+        if( await OTPs.findOne({email: email})){
+          const otp = await OTPs.findOneAndUpdate({email: email}, {OTP: OTP});
+          if(!otp){
+            return res.status(400).json({success: false, error: "OTP not sent"})
+          }
+        }
+        else{
+          const otp = await OTPs.create({
+            email: email,
+            OTP: OTP
+          })
+          if(!otp){
+          return res.status(400).json({success: false, error: "OTP not sent"})
+        }
+      }
+      
+      } else {
+        const otp = await OTPs.findOne({email: email});
+        if(!otp){
+          return res.status(400).json({success: false, error: "You have to SignUp first"})
+        }
+        if(otp.OTP != req.body.OTP){
+          return res.status(400).json({success: false, error: "Invalid OTP"})
+        }
+        const salt = await bcrypt.genSalt(10);
+        const secPass = await bcrypt.hash(req.body.password, salt);
+        user = await User.create({
+          name: req.body.name,
+          password: secPass,
+          email: req.body.email,
+        });
+        console.log(user);
+        const authToken = jwt.sign(email, JWT_SECRET);
+  
+        res.json({
+          success: true,
+          authToken: authToken,
+          name: user.name,
+          picture: user.picture,
+        });
+      }
 
-      user = await User.create({
-        name: req.body.name,
-        password: secPass,
-        email: req.body.email,
-      });
-      console.log(user);
-      const authToken = jwt.sign(req.body.email, JWT_SECRET);
-      res.json({
-        success: true,
-        authToken: authToken,
-        name: user.name,
-        picture: user.picture,
-      });
     } catch (error) {
       console.error(error.message);
-      res.status(500).json({ success: false, error: "some error occured" });
+      res.status(500).json({ success: false, error: error.message });
     }
   }
 );
