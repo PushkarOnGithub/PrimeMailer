@@ -3,7 +3,7 @@ import SignInWithGoogle from "./SignInWithGoogle";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const host = "http://127.0.0.1:5000";
+  const host = "http://127.0.0.1:3000";
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -12,8 +12,34 @@ const Signup = () => {
   const navigate = useNavigate();
   const handleOnChange = (event) => {
     setCredentials({ ...credentials, [event.target.name]: event.target.value });
-    // console.log(credentials);
   };
+  const [showOTP, setShowOTP] = useState(false)
+
+  const handleSendOTP = async(event) => {
+    event.preventDefault();
+    console.log(credentials);
+    let OTPresponse = await fetch(`${host}/api/auth/signup/credentials`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    });
+    OTPresponse = await OTPresponse.json();
+    if (OTPresponse.success) {
+      localStorage.setItem("authToken", OTPresponse.authToken);
+    localStorage.setItem("name", OTPresponse.name);
+    localStorage.setItem("picture", OTPresponse.picture);
+    console.log("Signup");
+    console.log(OTPresponse.authToken);
+    navigate("/");
+    // showAlert("Signed Up SuccessFully", "success");
+  }
+  else {
+    // showAlert("Invalid OTP", "danger");
+  }
+
+  }
   const handleSignupByCredentials = async (event) => {
     event.preventDefault();
     let response = await fetch(`${host}/api/auth/signup/credentials`, {
@@ -24,18 +50,17 @@ const Signup = () => {
       body: JSON.stringify(credentials),
     });
     response = await response.json();
-    if (response.success) {
-      localStorage.setItem("authToken", response.authToken);
-      localStorage.setItem("name", response.name);
-      localStorage.setItem("picture", response.picture);
-      console.log("Signup");
-      console.log(response.authToken);
-      navigate("/");
-      // showAlert("Signed Up SuccessFully", "success");
-    } else {
+    // if everything is correctly filled and user dont exist show OTP form
+    if(response.success){
+      setShowOTP(true);
+      // showAlert("OTP Sent Succesfully", "success");
+    }else {
+      if(response.error === "Email already Registered"){
+        navigate('/login');
+      }
       // showAlert("Invalid Details", "danger");
     }
-  };
+  }
   return (
     <>
       <h1
@@ -53,10 +78,10 @@ const Signup = () => {
         }}>
         <form
           style={{ textAlign: "left" }}
-          onSubmit={handleSignupByCredentials}>
+          onSubmit={showOTP ? handleSendOTP : handleSignupByCredentials}>
           <div className="mb-3">
             <label
-              htmlFor="exampleInputEmail1"
+              
               className="form-label"
               style={{ margin: "7px 0 0 0" }}>
               Name
@@ -70,7 +95,8 @@ const Signup = () => {
               aria-describedby="emailHelp"
               placeholder="Your Name"
               style={{ textIndent: "3%", minWidth: "200px" }}
-            />
+              minLength={3}
+              />
             <label
               htmlFor="exampleInputEmail1"
               className="form-label"
@@ -86,7 +112,7 @@ const Signup = () => {
               aria-describedby="emailHelp"
               placeholder="Your Email"
               style={{ textIndent: "3%", minWidth: "200px" }}
-            />
+              />
             <div id="emailHelp" className="form-text">
               We'll never share your email with anyone else.
             </div>
@@ -106,8 +132,25 @@ const Signup = () => {
               onChange={handleOnChange}
               placeholder="Your Password"
               style={{ textIndent: "3%", minWidth: "200px" }}
-            />
-          </div>
+              minLength={5}
+              />
+            <div className={showOTP?"":"d-none"}>
+            <label
+              className="form-label"
+              style={{ margin: "-2px 0 0 0" }}>
+              OTP
+            </label>
+            <input
+              type="text"
+              name="OTP"
+              className="form-control"
+              value={credentials.OTP}
+              onChange={handleOnChange}
+              placeholder="Your Password"
+              style={{ textIndent: "3%", minWidth: "200px" }}
+              minLength={6}
+              />
+          </div></div>
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
@@ -117,5 +160,7 @@ const Signup = () => {
     </>
   );
 };
-
-export default Signup;
+  
+  
+  export default Signup;
+  

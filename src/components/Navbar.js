@@ -4,14 +4,15 @@ import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const host = "http://127.0.0.1:3000";
   const { theme, setTheme } = useContext(themecontext);
   let location = useLocation();
   const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem('authToken')
-    localStorage.removeItem('name')
-    localStorage.removeItem('picture')
-    navigate('/')
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('name');
+    localStorage.removeItem('picture');
+    navigate("/");
   }
   return (
     <>
@@ -56,7 +57,7 @@ const Navbar = () => {
                   }`}
                   aria-current="page"
                   to="/login"
-                  
+
                   >
                   Login
                 </Link>
@@ -83,31 +84,22 @@ const Navbar = () => {
               <li className="nav-item dropdown">
                 <Link
                   className="nav-link dropdown-toggle"
-                  to="/"
+                  
                   id="navbarDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false">
                   {`Welcome ${localStorage.getItem('name')?localStorage.getItem('name')[0].toUpperCase()+localStorage.getItem('name').slice(1):""}`}
+                  <img src={localStorage.picture} alt="" style={{width: "30px"}} className={`${!localStorage.getItem('authToken') ? "d-none": ""}`}/>
                 </Link>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li className={!localStorage.getItem('authToken') ? "d-none": ""}>
-                    <Link className="dropdown-item" onClick={handleLogout}>
+                  <li >
+                    {localStorage.getItem('name')?(<Link className="dropdown-item" onClick={handleLogout} to='/'>
                       Logout
-                    </Link>
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/">
-                      Another action
-                    </Link>
-                  </li>
-                  <li>
-                    <hr className="dropdown-divider" />
-                  </li>
-                  <li>
-                    <Link className="dropdown-item" to="/">
-                      Something else here
-                    </Link>
+                    </Link>):
+                    (<Link className="dropdown-item" onClick={()=>{navigate("/login")}} to='/login'>
+                      Login
+                    </Link>)}
                   </li>
                 </ul>
               </li>

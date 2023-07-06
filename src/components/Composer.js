@@ -72,9 +72,7 @@ const Composer = () => {
         <textarea
           ref={textareaRef} 
           value={text}
-          style={{ height: "300px" }}
-          cols="92"
-          rows="15"
+          style={{ width: "50%", height: "50%", maxWidth: "50"}}
           aria-labelledby="your-answer-header"
           tabIndex="101"
           data-min-length=""

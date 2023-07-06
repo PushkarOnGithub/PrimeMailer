@@ -9,13 +9,12 @@ const OTPsSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    expireAt: {
+    expireAt_1: {
         type: Date,
-        default: Date.now,
         unique: true
     }
 })
 
 const OTPs = mongoose.model('otps', OTPsSchema);
-OTPs.createIndexes({expireAt: 1, expireAfterSeconds: 10});
+OTPs.createIndexes({expireAt: 1, expireAfterSeconds: 0});
 module.exports = OTPs;

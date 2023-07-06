@@ -29,11 +29,12 @@ mimeMessage.attach(MIMEText(emailMsg, 'plain'))
 
 rawString = base64.urlsafe_b64encode(mimeMessage.as_bytes()).decode()
 
-message = service.users().messages().send(userId='me', body={'raw': rawString}).execute()
+# message = service.users().messages().send(userId='me', body={'raw': rawString}).execute()
+message = {'id': True}
 
 try:
     if(message.get('id')):
-        # print(message)
+        print(OTP)
         print("Sent")
         print(f"To {EMAIL}")
 except:

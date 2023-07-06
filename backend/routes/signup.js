@@ -23,7 +23,7 @@ router.post(
     body("password", "Invalid Password").isLength({ min: 5 }),
   ],
   async (req, res) => {
-    // if there are errors, return Bad request and the errors
+    // check for correct input and if there are errors, return Bad request and the errors
     const result = validationResult(req);
     if (!result.isEmpty()) {
       return res.status(400).json({ success: false, errors: result.array() });
@@ -33,63 +33,103 @@ router.post(
       const email = req.body.email;
       let user = await User.findOne({ email: email });
       if (user) {
+        // if user already exists redirect to login.
         return res
           .status(400)
           .json({ success: false, error: "Email already Registered" });
       }
+      // if the body dont have OTP send one by email and save the OTP to the DB
       if (!req.body.OTP) {
         const OTP = SixDigitRandomNumber();
+
+        // sending email by python containing an OTP
+
         const { PythonShell } = require("python-shell");
         let pyshell = new PythonShell(
-          "C:\\Users\\pushk\\React Projects\\primemailer\\backend\\routes\\python\\sendtestmail.py",
+          "C:\\Users\\pushk\\React Projects\\primemailer\\backend\\routes\\python\\SendOtpMail.py",
           { mode: "text", pythonOptions: ["-u"] }
-        );
+          );
+
+          // send OTP generated and email to python script and wait for response from the script
+
+          pyshell.send(OTP);
+          pyshell.send(email);
+
         pyshell.on("message", (message) => {
           console.log(message);
+
+          // if email doesn't exist send 400 error response
+
           if (message == "Invalid Email") {
             return res
               .status(400)
               .json({ success: false, error: "Invalid Email" });
           }
+
+          // if OTP is sent send a 200 ok response
+
           else if(message == "Sent"){
             return res.status(200).json({success: true, message: "OTP Sent"})
           }
+
+          // if OTP is not sent send a 500 internal server error response
+
           else if(message == "OTP not sent"){
-            return res.json(400).json({success: false, error: "OTP not sent"})
+            return res.status(500).json({success: false, error: "OTP not sent"})
           }
         });
         pyshell.on("stderr", (stderr) => {
-          console.log(stderr);
+          console.log("Python Error : ", stderr);
+
+          // if there is some error in python script 
+
           return res
             .status(500)
             .json({ success: false, error: "internal server error" });
         });
-        pyshell.send(OTP);
-        pyshell.send(email);
+        // check if the user exists already meaning user has requested another OTP before first expired
+
         if( await OTPs.findOne({email: email})){
-          const otp = await OTPs.findOneAndUpdate({email: email}, {OTP: OTP});
-          if(!otp){
-            return res.status(400).json({success: false, error: "OTP not sent"})
+
+          // if user exists then update the OTP with new one
+
+          if(! await OTPs.findOneAndUpdate({email: email}, {OTP: OTP, expireAt_1: new Date(Date.now())})){
+
+            // if otp is not saved then maybe Mongo is not connected. internal server error
+            
+            return res.status(500).json({success: false, error: "OTP not sent"});
           }
         }
+        // if user is requesting the otp for the first time or previous one has expired.
         else{
+          // create a new OTPs object
           const otp = await OTPs.create({
             email: email,
-            OTP: OTP
+            OTP: OTP,
+            expireAt_1: new Date(Date.now())
           })
+          // if otp is not saved then maybe Mongo is not connected. internal server error
           if(!otp){
-          return res.status(400).json({success: false, error: "OTP not sent"})
+          return res.status(500).json({success: false, error: "OTP not sent"})
         }
       }
-      
+      // if body contain an OTP then verify it with the saved one from the DB
       } else {
+        // get the OTP saved
         const otp = await OTPs.findOne({email: email});
         if(!otp){
-          return res.status(400).json({success: false, error: "You have to SignUp first"})
+          // if user took too long to enter OTP means OTP has expired
+
+          return res.status(400).json({success: false, error: "OTP has Expired"})
+
         }
         if(otp.OTP != req.body.OTP){
+          // if OTP is incorrect
+
           return res.status(400).json({success: false, error: "Invalid OTP"})
+
         }
+        // if all is well generate hashed password for the user and save it into DB
         const salt = await bcrypt.genSalt(10);
         const secPass = await bcrypt.hash(req.body.password, salt);
         user = await User.create({
@@ -100,7 +140,7 @@ router.post(
         console.log(user);
         const authToken = jwt.sign(email, JWT_SECRET);
   
-        res.json({
+        return res.json({
           success: true,
           authToken: authToken,
           name: user.name,
@@ -109,13 +149,15 @@ router.post(
       }
 
     } catch (error) {
+      // if there are some errors log them and send to the user some error occured
       console.error(error.message);
-      res.status(500).json({ success: false, error: error.message });
+      return res.status(500).json({ success: false, error: error.message });
     }
   }
 );
 
 router.get("/withgoogle/:authToken", async (req, res) => {
+  // get authToken from the url parameters as this request has been redirected by the google redirect with a jwtToken.
   authToken = req.params.authToken;
   try {
     email = jwt.verify(authToken, JWT_SECRET);
@@ -127,7 +169,7 @@ router.get("/withgoogle/:authToken", async (req, res) => {
   const creds = await Creds.findOne({ email: email });
   console.log("Creds : ", creds);
   if (!creds) {
-    res.status(400).send("invalid credentials");
+    res.status(400).json({success: false ,error: "invalid credentials"});
     return;
   }
   const userExists = await User.findOne({ email: email });
@@ -174,12 +216,13 @@ router.get("/withgoogle/:authToken", async (req, res) => {
       }
     }
   } else if (userExists) {
-    res.json({
+    res.status(200).json({
       success: true,
       authToken: authToken,
       name: userExists.name,
       picture: userExists.picture,
-    });
+    })
+    return;
   } else {
     res.status(400).send("invalid credentials");
   }
