@@ -98,9 +98,9 @@ router.get('/', async(req, res) => {
 
   if(saved){
     const authToken= jwt.sign(userInfo.email, JWT_SECRET);
-    res.redirect(301, `http://127.0.0.1:5000/signup/withgoogle/${authToken}`)}
+    res.redirect(301, `http://127.0.0.1:5000/api/auth/signup/withgoogle/${authToken}`)}
     else{
-      res.redirect(400, 'http://127.0.0.1:5000/signup')
+      res.redirect(400, 'http://127.0.0.1:5000/api/auth/signup')
       console.error('error in saving creds')
   }
 })

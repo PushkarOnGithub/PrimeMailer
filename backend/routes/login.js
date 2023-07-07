@@ -4,7 +4,6 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { route } = require('./google_redirect');
 
 
 const JWT_SECRET = "helloU$er";
@@ -35,7 +34,7 @@ router.post('/credentials',[
   }
   const authToken= jwt.sign(user.email, JWT_SECRET);
 
-  res.json({
+  res.status(200).json({
     success: true, 
     authToken: authToken,
     name: user.name,
@@ -46,6 +45,16 @@ router.post('/credentials',[
     console.log(error.message);
     res.status(500).json({success: false, "error": "Internal Server Error"});
   }
+})
+
+router.post('/withgoogle', async(req, res)=>{
+  const {success, authToken, name, picture} = req.body;
+  if(success && !jwt.verify(authToken, JWT_SECRET)){
+    res.status(400).json({success: false, error: "Invalid Token"});
+    return;
+  }
+  res.status(200).json({success: true, authToken: authToken, name: name, picture: picture});
+  return ;
 })
 
 module.exports = router;

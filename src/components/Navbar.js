@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { themecontext } from "../contexts/themeState";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import Alert from "./Alert";
 
 const Navbar = () => {
   const host = "http://127.0.0.1:3000";
@@ -13,9 +15,11 @@ const Navbar = () => {
     localStorage.removeItem('name');
     localStorage.removeItem('picture');
     navigate("/");
+    toast.success("Logged Out Successfully", { theme: "colored" });
   }
   return (
     <>
+    <Alert/>
       <nav className={`navbar navbar-expand-lg navbar-${"dark"} bg-${"dark"}`}>
         <div className="container-fluid">
           <Link className="navbar-brand " to="/" style={{ fontSize: "30px" }}>
@@ -90,7 +94,7 @@ const Navbar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false">
                   {`Welcome ${localStorage.getItem('name')?localStorage.getItem('name')[0].toUpperCase()+localStorage.getItem('name').slice(1):""}`}
-                  <img src={localStorage.picture} alt="" style={{width: "30px"}} className={`${!localStorage.getItem('authToken') ? "d-none": ""}`}/>
+                  <img src={localStorage.picture} alt="" style={{width: "30px", borderRadius:"15px"}} className={`${!localStorage.getItem('authToken') ? "d-none": ""}`}/>
                 </Link>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li >

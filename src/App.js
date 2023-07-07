@@ -6,16 +6,18 @@ import ThemeState from "./contexts/themeState";
 import Home from "./components/Home";
 import Login from './components/Login'
 import Signup from "./components/Signup";
+import NotFound from "./components/NotFound";
 
 function App() {
   return (
     <ThemeState>
       <Router>
-        <Navbar />
+        <Navbar/>
         <Routes>
           <Route exact path='/' element={<Home/>}/>
           <Route exact path='/login' element={<Login/>}/>
           <Route exact path='/signup' element={<Signup/>}/>
+          <Route path = "*" element = {<NotFound/>}/>
           </Routes>
       </Router>
     </ThemeState>

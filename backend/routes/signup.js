@@ -14,7 +14,7 @@ const OTPs = require("../models/OTPs");
 const SixDigitRandomNumber = () => {
   return Math.floor(Math.random() * (999999 - 100000 + 1) + 100000);
 };
-
+const host = "http://127.0.0.1:3000"
 router.post(
   "/credentials",
   [
@@ -140,7 +140,7 @@ router.post(
         console.log(user);
         const authToken = jwt.sign(email, JWT_SECRET);
   
-        return res.json({
+        return res.status(200).json({
           success: true,
           authToken: authToken,
           name: user.name,
@@ -160,21 +160,28 @@ router.get("/withgoogle/:authToken", async (req, res) => {
   // get authToken from the url parameters as this request has been redirected by the google redirect with a jwtToken.
   authToken = req.params.authToken;
   try {
+    // verify the authToken
     email = jwt.verify(authToken, JWT_SECRET);
   } catch (error) {
     console.log(error.message);
-    res.redirect(400, "http://127.0.0.1:5000/signup");
+    // redirect if the authToken is tempered or there is some error
+    res.redirect(400, host+"/signup");
     return;
   }
+  // find if the credentials exist in the DB meaning that the user is really coming from redirection from google_redirect
   const creds = await Creds.findOne({ email: email });
   console.log("Creds : ", creds);
   if (!creds) {
+    // if not bad request error
     res.status(400).json({success: false ,error: "invalid credentials"});
     return;
   }
+  // find if the user previously logged in
   const userExists = await User.findOne({ email: email });
   console.log(userExists);
+  // if not meaning that the user is coming for the first time
   if (!userExists) {
+    // Function to get details of the user from the google API
     const getUserProfile = async (email) => {
       try {
         oauth2Client.setCredentials({
@@ -183,17 +190,18 @@ router.get("/withgoogle/:authToken", async (req, res) => {
         const response = await google
           .oauth2("v2")
           .userinfo.get({ auth: oauth2Client });
-        const profile = response.data;
+        const profile = response.data; // user data
         console.log("User Profile:", profile);
         return profile;
       } catch (error) {
+        // if there is some error log it onto console
         console.error("Error retrieving user profile:", error.message);
         return false;
       }
     };
 
     const salt = await bcrypt.genSalt(10);
-    const secPass = await bcrypt.hash(email, salt);
+    const secPass = await bcrypt.hash(email, salt); // create a temporary password for the user for security
     const profile = await getUserProfile(email);
     if (profile) {
       let user = new User({
@@ -203,28 +211,32 @@ router.get("/withgoogle/:authToken", async (req, res) => {
         picture: profile.picture,
       });
       try {
+        // try to save the user into DB
         user = user.save();
-        res.json({
+        const payload = JSON.stringify({
           success: true,
           authToken: authToken,
           name: user.name,
           picture: user.picture,
-        });
+        })
+        // if all goes well redirect to login page with user data
+        return res.redirect(301, host+`/login/?payload=${payload}`);
       } catch (error) {
         console.log("cannot save user", error.message);
-        res.redirect(400, "http://127.0.0.1:5000/signup");
+        return res.redirect(400, host+"/signup");
       }
     }
   } else if (userExists) {
-    res.status(200).json({
+    const payload = JSON.stringify({
       success: true,
       authToken: authToken,
       name: userExists.name,
-      picture: userExists.picture,
-    })
+      picture: userExists.picture
+    });
+    res.redirect(301, host+`/login/?payload=${payload}`);
     return;
   } else {
-    res.status(400).send("invalid credentials");
+    res.status(400).json({success: false, error: "invalid credentials"});
   }
 });
 
