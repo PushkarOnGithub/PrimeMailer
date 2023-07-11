@@ -1,87 +1,135 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
+import { EditorState, convertToRaw } from "draft-js";
+import { Editor } from "react-draft-wysiwyg";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { toast } from "react-toastify";
+import Alert from "./Alert";
+
 const Composer = () => {
-  const [text, setText] = useState("");
-  const textareaRef = useRef(null);
-
-  const handleOnChange = (event) => {
-    setText(event.target.value);
+  const host = "http://127.0.0.1:5000";
+  const [editorState, setEditorState] = useState(() =>
+    EditorState.createEmpty()
+  );
+  const handleOnChange = (state) => {
+    setEditorState(state);
+    // const temp = ((convertToRaw(editorState.getCurrentContent()).blocks)[0]).text.split(" ");
+    // console.log([...new Set(temp)].length);
   };
+  const [csvFile, setCsvFile] = useState(null);
 
-  const selectedText = () => {
-    const textarea = textareaRef.current;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    return {start, end}
+  const handleCsvFile = (event) => {
+    setCsvFile(event.target.files[0]);
   }
 
-  const bold = () => {
-    const {start, end} = selectedText();
-    if(start === end){return;}
-    let formattedText = `${text.slice(0, start)}**${text.slice(start, end)}**${text.slice(end)}`;
-    const boldRegExp = new RegExp("[A-Za-z]{0,}[*]{2}[A-Za-z]{0,}[*]{2}[A-Za-z]{0,}")
-    const mat = formattedText.match(boldRegExp)
-    console.log(mat)
-    formattedText.replace(mat, <b>{mat}</b>)
-    // const formattedText = text.slice(0, start) + <b>(text.slice(start, end))</b> + text.slice(end);
-    setText(formattedText);
-  }
-
-  const italic = () => {
-    const {start, end} = selectedText();
-    if(start === end){return;}
-    const formattedText = `${text.slice(0, start)}_${text.slice(start, end)}_${text.slice(end)}`;
-    setText(formattedText);
-  }
-
-  const handleImageInsert = (imageUrl="../src/logo.svg") => {
-    const {start, end } = selectedText();
-    const formattedText =  `${text.slice(0, start)}![image]${imageUrl}${text.slice(end)}`
-    setText(formattedText)
-  }
+  const handleSendMails = async () => {
+    // add html data
+    const rawHtmlData = ((convertToRaw(editorState.getCurrentContent()).blocks)[0]).text.split(" ");
+    if([... new Set(rawHtmlData)].length === 0){
+      toast.error("Email Body Can not be Empty")
+      return;
+    }else if([... new Set(rawHtmlData)].length < 5){
+      toast.error("Email is too short");
+      return;
+    }
+    
+    // add csv file
+    if(! csvFile){
+      toast.error("Please select the recipient file")
+      return;
+    }else if(csvFile.size > 1024*1024){
+      toast.error('File Size Exceeded');
+      setCsvFile(null);
+      return;
+    }
+    // if both html and csv are of required types save it as a form
+    const htmlData = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+    // console.log(typeof(htmlData));
+    const formData = new FormData();
+    formData.append('html', htmlData)
+    formData.append('csv', csvFile)
+    // console.log(formData)
+    let response = await fetch(host + "/api/mails/send", {
+      method: "POST",
+      headers: {
+        authToken: localStorage.getItem("authToken"),
+      },
+      body: formData,
+    });
+    console.log(response);
+  };
   return (
     <>
-      <div className="container mb-8">
-        <div className="button-bar btr-sm" style={{ verticalAlign: "true" }}>
-          <ul
-            style={{
-              display: "flex",
-              listStyleType: "none",
-              padding:"10px"
-            }}>
-            <li
-              id="bold-button"
-              className="button"
-              style={{ margin: "0 15px", display: "inline" }}>
-              <i className="fa-solid fa-bold" onClick={bold}></i>
-            </li>
-            <li
-              id="italic-button"
-              className="button"
-              style={{ margin: "0 15px" }}>
-              <i className="fa-solid fa-italic" onClick={italic}></i>
-            </li>
-            <li
-              id="italic-button"
-              className="button"
-              style={{ margin: "0 15px" }}>
-              <i className="fa-solid fa-image" onClick={handleImageInsert}></i>
-            </li>
-          </ul>
-        </div>
-
-        <textarea
-          ref={textareaRef} 
-          value={text}
-          style={{ width: "50%", height: "50%", maxWidth: "50"}}
-          aria-labelledby="your-answer-header"
-          tabIndex="101"
-          data-min-length=""
-          onChange={handleOnChange}></textarea>
-      </div>
-      <div className="container">
-        <button type="button" className="btn btn-primary">
-          Primary
+    <Alert/>
+      <div className="container" style={{ marginTop: "1vb" }}>
+        <Editor
+          editorState={editorState} 
+          onEditorStateChange={handleOnChange}
+        />
+        <button
+          type="button"
+          className="btn btn-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#exampleModal2"
+          // onClick={() => {
+          //   setShowModal(true);
+          //   handleConfirmation();
+          // }}
+          style={{ margin: "10px 0 0 0" }}>
+          Send
         </button>
+      </div>
+      <form>
+        <div
+          className="container"
+          style={{ margin: "25px 10px", textAlign: "center" }}>
+          <div className="form-group">
+            <input
+              type="file"
+              className="form-control-file"
+              id="exampleFormControlFile1"
+              onChange={handleCsvFile}
+              style={{ maxWidth: "205px", minWidth: "205px" }}
+              accept=".csv,.xlsx"
+            />
+            <label htmlFor="exampleFormControlFile1">
+              Recipient List( csv and excel files supported)
+            </label>
+          </div>
+        </div>
+      </form>
+
+      {/* <!-- Modal --> */}
+      <div
+        className="modal fade"
+        id="exampleModal2"
+        tabIndex="-1"
+        aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5
+                className="modal-title"
+                style={{ fontSize: "25px", color: "red" }}>
+                Are You Sure?
+              </h5>
+            </div>
+
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-success"
+                data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="button" className="btn btn-warning mx-3"
+              onClick={handleSendMails}
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

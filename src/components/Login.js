@@ -51,28 +51,33 @@ const Login = () => {
   };
   const handleLogInByCredentials = async (event) => {
     event.preventDefault();
-    let response = await toast.promise(fetch(`${host}/api/auth/login/credentials`, {
+    let response = await fetch(`${host}/api/auth/login/credentials`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(credentials),
-    }),{
-      pending:"Trying to Log in",
-      success:"Logged in Successfully",
-      error:"Invalid Credentials"
-    });
+    })
     console.log(credentials)
-    response = await response.json();
+    response = await toast.promise(response.json(),{pending:"Trying to log in"})
     if (response.success) {
       localStorage.setItem("authToken", response.authToken);
       localStorage.setItem("name", response.name);
       localStorage.setItem("picture", response.picture);
       console.log("Login");
       console.log(response.authToken);
-      // await new Promise(r => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
+      toast.success("Logged in Successfully", {theme: "colored"})
+      await new Promise(r => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
       navigate("/");
     }
+    else{
+      if(response.error === "User not registered"){
+        toast.error("You have to Signup First")
+        await new Promise(r => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
+        navigate("/signup")
+      }else{
+        toast.error("Invalid Credentials", {theme:"colored"})
+    }}
   };
 
   return (

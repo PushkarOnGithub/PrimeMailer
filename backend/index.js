@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 //Available Routes
-// app.use("/api/mails", require('./routes/mails.js'))
+app.use("/api/mails", require('./routes/mails.js'))
 app.use("/oauth2callback", require("./routes/google_redirect.js"));
 app.use("/api/auth/signup", require("./routes/signup.js"));
 app.use("/api/auth/login", require("./routes/login.js"));

@@ -17,7 +17,6 @@ const Alert = () => {
         pauseOnHover
         theme="light"
         limit={3}
-        p
       />
   )
 }

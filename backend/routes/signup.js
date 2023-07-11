@@ -172,7 +172,7 @@ router.get("/withgoogle/:authToken", async (req, res) => {
   const creds = await Creds.findOne({ email: email });
   console.log("Creds : ", creds);
   if (!creds) {
-    // if not bad request error
+    // if not, bad request error
     res.status(400).json({success: false ,error: "invalid credentials"});
     return;
   }
@@ -204,15 +204,14 @@ router.get("/withgoogle/:authToken", async (req, res) => {
     const secPass = await bcrypt.hash(email, salt); // create a temporary password for the user for security
     const profile = await getUserProfile(email);
     if (profile) {
-      let user = new User({
-        name: profile.name,
-        email: profile.email,
-        password: secPass,
-        picture: profile.picture,
-      });
+      // try to save the user into DB
       try {
-        // try to save the user into DB
-        user = user.save();
+        const user = await User.create({
+          name: profile.name,
+          email: profile.email,
+          password: secPass,
+          picture: profile.picture,
+        });
         const payload = JSON.stringify({
           success: true,
           authToken: authToken,

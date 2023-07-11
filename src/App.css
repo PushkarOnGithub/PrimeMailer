@@ -75,3 +75,12 @@
 body{
   font-family: 'Open Sans';
 }
+
+.rdw-editor-main{
+  border: 3px solid;
+  border-color: rgba(0, 255, 0, 0.1);
+  padding: 5px;
+  min-height: 50vb;
+  border-radius: 5px;
+  cursor: text;
+}

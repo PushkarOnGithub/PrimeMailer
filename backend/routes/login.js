@@ -23,7 +23,7 @@ router.post('/credentials',[
   try{
   let user = await User.findOne({email: email});
   if(!user){
-    res.status(400).json({success: false, "error": "1Incorrect Credentials"});
+    res.status(400).json({success: false, "error": "User not registered"});
     return;
   }
   

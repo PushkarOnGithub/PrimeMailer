@@ -52,13 +52,15 @@ const Signup = () => {
       },
       body: JSON.stringify(credentials),
     }), {
-      success: "OTP Sent",
       pending: "Sending OTP",
-      error: "OTP not sent"
     });
     response = await response.json();
     // if everything is correctly filled and user dont exist show OTP form
-    if (!response.success) {
+    if(response.success){
+      setShowOTP(true);
+      toast.success("OTP Sent", {theme: "colored"})
+    }
+    else{
       if (response.error === "Email already Registered") {
         toast.warn("You are already registered !!", { theme: "colored" });
 
@@ -70,7 +72,6 @@ const Signup = () => {
         return;
       }
     }
-    setShowOTP(true);
   };
   return (
     <>
@@ -104,6 +105,7 @@ const Signup = () => {
               aria-describedby="emailHelp"
               placeholder="Your Name"
               style={{ textIndent: "3%", minWidth: "200px" }}
+              required
               minLength={3}
             />
             <label
@@ -121,6 +123,7 @@ const Signup = () => {
               aria-describedby="emailHelp"
               placeholder="Your Email"
               style={{ textIndent: "3%", minWidth: "200px" }}
+              required
             />
             <div id="emailHelp" className="form-text">
               We'll never share your email with anyone else.
@@ -141,7 +144,8 @@ const Signup = () => {
               onChange={handleOnChange}
               placeholder="Your Password"
               style={{ textIndent: "3%", minWidth: "200px" }}
-              minLength={5}
+              required
+              minLength="5"
             />
             <div className={showOTP ? "" : "d-none"}>
               <label className="form-label" style={{ margin: "-2px 0 0 0" }}>
