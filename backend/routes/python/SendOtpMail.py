@@ -20,7 +20,7 @@ if(False):
     exit(0)
 # print(OTP)
 # print(EMAIL)
-emailMsg = f"Welcome to PrimeMailerYour OTP to login to PrimeMailer is {OTP} ."
+emailMsg = f"Welcome to PrimeMailer Your OTP to login to PrimeMailer is {OTP} ."
 mimeMessage = MIMEMultipart()
 mimeMessage['to'] = EMAIL
 mimeMessage['subject'] = "Welcome to PrimeMailer"

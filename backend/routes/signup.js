@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = "helloU$er";
 const { google } = require("googleapis");
-let oauth2Client = require("../oauth2Client.js");
+let oauth2Client = require("./oauth2Client.js");
 const OTPs = require("../models/OTPs");
 
 const SixDigitRandomNumber = () => {

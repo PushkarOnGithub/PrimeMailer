@@ -10,22 +10,22 @@ const DraftsSchema = mongoose.Schema({
         default: Date.now
     },
     csv:{
-        type: Binary,
+        type: Buffer,
         required: true,
     },
     html:{
         type: String,
         required: true,
     },
-    Totallength:{
-        type: Int,
+    totalLength:{
+        type: Number,
         required: true,
     },
     currentIndex:{
-        type: Int,
+        type: Number,
         default: 0
     },
-    Status:{
+    status:{
         type: Boolean,
         default: false
     }

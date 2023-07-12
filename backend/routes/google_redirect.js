@@ -6,7 +6,7 @@ const Creds = require('../models/Creds')
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "helloU$er";
 
-let oauth2Client = require('../oauth2Client.js')
+let oauth2Client = require('./oauth2Client.js')
 
 let tokens = null;
 const scopes = [
