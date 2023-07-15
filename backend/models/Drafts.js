@@ -6,7 +6,15 @@ const DraftsSchema = mongoose.Schema({
         required: true,
     },
     date:{
-        type: Date,
+        type: Number,
+        default: Date.now
+    },
+    lastVisited:{
+        type: Number,
+        default: Date.now
+    },
+    lastSent:{
+        type: Number,
         default: Date.now
     },
     csv:{

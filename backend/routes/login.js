@@ -11,7 +11,7 @@ const JWT_SECRET = "helloU$er";
 router.post('/credentials',[
     body('email', "Invalid Email").isEmail(),
     body('password', "Password Can not be blank").exists(),
-],async (req, res) =>{
+],async (req, res) =>{ 
   // if there are errors, return Bad request and the errors
     const result = validationResult(req);
   if (!result.isEmpty()) {
@@ -21,7 +21,7 @@ router.post('/credentials',[
   // Check weather the user with the email exists.
 
   try{
-  let user = await User.findOne({email: email});
+  let user = await User.findOne({email: email}); 
   if(!user){
     res.status(400).json({success: false, "error": "User not registered"});
     return;

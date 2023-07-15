@@ -28,7 +28,6 @@ const filterEmails = async (emails) => {
   const emailRegex = new RegExp("[a-zA-Z0-9.+{1}]+@[a-zA-Z0-9-]+\.[a-zA-Z.]+");
   
   emails.forEach((email) => {
-    // console.log(email)
     if (emailRegex.test(email)) {
       validEmails.add(email);
     }
@@ -38,10 +37,9 @@ const filterEmails = async (emails) => {
 
 const upload = multer();
 
-router.post("/send", upload.single("csv"), async (req, res) => {
-  // console.log("html: ", (req.body.html));
-  // console.log("csv: ", (req.file));
 
+// Routes 
+router.post("/send", upload.single("csv"), async (req, res) => {
   // if there are errors, return Bad request and the errors
 
   const html = req.body.html;
@@ -79,16 +77,21 @@ router.post("/send", upload.single("csv"), async (req, res) => {
 
     await readableStream
       .on("data", (row) => {
-        emails = (row.split(",\r\n"))
+        emails = (row.replace(/[\r,]+/gm, '').split("\n"))
       })
       .on("end", () => {
         console.log("CSV processing complete");
       });
 
     const valid_emails = await filterEmails(emails)
-
+    console.log(valid_emails)
+    if(valid_emails.length === 0){
+      return res.status(400).json({success: false, error: "please provide file in the correct comma seperated format"});
+    }
+    
     // converting this refined email list to binary
     const valid_emails_buffer = Buffer.from([...valid_emails].join(","));
+    console.log(valid_emails_buffer)
 
     // add the final draft into the DB
     const draft = await Drafts.create({

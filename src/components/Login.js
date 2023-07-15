@@ -83,7 +83,7 @@ const Login = () => {
   return (
     <>
       <h1
-        style={{ textAlign: "center", margin: "4% 0 -2% 0", fontSize: "40px" }}>
+        style={{ textAlign: "center", margin: "5vb 0 2vb 0", fontSize: "40px" }}>
         Login into PrimeMailer
       </h1>
       <Alert/>
