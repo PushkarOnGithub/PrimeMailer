@@ -11,18 +11,22 @@ import Footer from "./components/Footer";
 
 function App() {
   return (
+    <>
     <ThemeState>
       <Router>
         <Navbar/>
+        <div className="content" style={{ paddingBottom: '100px', flexGrow: 1, overflowY: 'auto' }}>
         <Routes>
           <Route exact path='/' element={<Home/>}/>
           <Route exact path='/login' element={<Login/>}/>
           <Route exact path='/signup' element={<Signup/>}/>
           <Route path = "*" element = {<NotFound/>}/>
           </Routes>
+          </div>
           <Footer/>
       </Router>
     </ThemeState>
+    </>
   );
 }
 

@@ -73,7 +73,9 @@
 }
 
 body{
-  font-family: 'Open Sans';
+  font-family: 'Georgia';
+  background-color: '#FFFAF0';
+  /* background-color: black; */
 }
 
 .rdw-editor-main{

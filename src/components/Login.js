@@ -91,10 +91,14 @@ const Login = () => {
         className="container"
         style={{
           textAlign: "center",
+          justifyContent: 'center',
           width: "35%",
           padding: "5%",
           maxWidth: "40%",
-          minWidth: "200px",
+          minWidth: "300px",
+          backgroundColor: 'white',
+          boxShadow:'0 6px 6px 0 rgba(0, 0, 255, 0.05), 0 6px 6px 0 rgba(0, 0, 255, 0.05)',
+          marginBottom:"20px"
         }}>
         <form style={{ textAlign: "left" }} onSubmit={handleLogInByCredentials}>
           <div className="mb-3">
@@ -111,9 +115,6 @@ const Login = () => {
               placeholder="Your Email"
               style={{ textIndent: "3%", minWidth: "200px" }}
             />
-            <div id="emailHelp" className="form-text">
-              We'll never share your email with anyone else.
-            </div>
           </div>
           <div className="mb-3">
             <label htmlFor="exampleInputPassword1" className="form-label">
@@ -129,7 +130,7 @@ const Login = () => {
               style={{ textIndent: "3%", minWidth: "200px" }}
             />
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-info">
             Submit
           </button>
         </form>

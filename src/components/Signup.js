@@ -76,18 +76,23 @@ const Signup = () => {
   return (
     <>
       <h1
-        style={{ textAlign: "center", margin: "4% 0 -2% 0", fontSize: "40px" }}>
-        Signup into PrimeMailer
+        style={{ textAlign: "center", margin: "5vb 0 2vb 0", fontSize: "40px" }}>
+        Signup to PrimeMailer
       </h1>
       <Alert />
       <div
         className="container"
         style={{
           textAlign: "center",
+          justifyContent: 'center',
           width: "35%",
           padding: "5%",
           maxWidth: "40%",
-          minWidth: "200px",
+          minWidth: "300px",
+          backgroundColor: 'white',
+          boxShadow:'0 6px 6px 0 rgba(0, 0, 255, 0.05), 0 6px 6px 0 rgba(0, 0, 255, 0.05)',
+          marginBottom:"20px",
+          
         }}>
         <form
           style={{ textAlign: "left" }}
@@ -163,7 +168,7 @@ const Signup = () => {
               />
             </div>
           </div>
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-info">
             Submit
           </button>
         </form>

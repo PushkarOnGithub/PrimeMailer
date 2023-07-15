@@ -13,8 +13,6 @@ const Composer = () => {
   );
   const handleOnChange = (state) => {
     setEditorState(state);
-    // const temp = ((convertToRaw(editorState.getCurrentContent()).blocks)[0]).text.split(" ");
-    // console.log([...new Set(temp)].length);
   };
   const [csvFile, setCsvFile] = useState(null);
 
@@ -66,19 +64,18 @@ const Composer = () => {
           editorState={editorState} 
           onEditorStateChange={handleOnChange}
         />
+        <div style={{margin: "10px 0 0 0"}}>
         <button
           type="button"
           className="btn btn-danger"
           data-bs-toggle="modal"
           data-bs-target="#exampleModal2"
-          // onClick={() => {
-          //   setShowModal(true);
-          //   handleConfirmation();
-          // }}
-          style={{ margin: "10px 0 0 0" }}>
+          disabled={localStorage.authToken && editorState.getCurrentContent() && csvFile ? false : true}
+          >
           Send
         </button>
-      </div>
+        <span style={{color: 'red'}}>[Login Required]</span>
+      </div></div>
       <form>
         <div
           className="container"

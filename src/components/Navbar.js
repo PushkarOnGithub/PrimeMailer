@@ -46,13 +46,6 @@ const Navbar = () => {
             className="navbar-brand "
             to="/"
             style={{ fontSize: "30px"}}>
-            <img
-              src="/docs/5.0/assets/brand/bootstrap-logo.svg"
-              alt=""
-              width="30"
-              height="24"
-              className="d-inline-block align-text-top"
-            />
             PrimeMailer
           </Link>
           <button
@@ -68,7 +61,7 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-              <li className="nav-item">
+              {/* <li className="nav-item">
                 <Link
                   className={`nav-link ${
                     location.pathname === "/mails" ? "active" : ""
@@ -77,7 +70,7 @@ const Navbar = () => {
                   to="/mails">
                   Mails
                 </Link>
-              </li>
+              </li> */}
               <li
                 className={`"nav-item" ${
                   localStorage.getItem("authToken") ? "d-none" : ""
@@ -113,7 +106,7 @@ const Navbar = () => {
                   About
                 </Link>
               </li>
-              <li className="nav-item dropdown">
+              <li className="nav-item dropdown" >
                 <Link
                   className="nav-link dropdown-toggle"
                   id="navbarDropdown"
@@ -168,17 +161,6 @@ const Navbar = () => {
                 </ul>
               </li>
             </ul>
-            <form className="d-flex">
-              <input
-                className="form-control me-2"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-              />
-              <button className="btn btn-outline-success" type="submit">
-                Search
-              </button>
-            </form>
           </div>
         </div>
       </nav>
