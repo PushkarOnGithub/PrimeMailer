@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { themecontext } from "../contexts/themeState";
 import { Link } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -19,8 +18,6 @@ const Navbar = () => {
       }
     });
   });
-  const host = "http://127.0.0.1:3000";
-  const { theme, setTheme } = useContext(themecontext);
   let location = useLocation();
   const navigate = useNavigate();
   const confirmationRef = useRef(null);

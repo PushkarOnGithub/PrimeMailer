@@ -6,9 +6,8 @@ connectToMongo();
 
 let isProcessing = false;
 
-CLIENT_ID =
-  "4424322079-ejm6s550hm5r76v1shsktpag2frir52f.apps.googleusercontent.com";
-CLIENT_SECRET = "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";
+CLIENT_ID = process.env.CLIENT_ID;
+CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 // Function to check refresh token
 const checkRefreshToken = async (refreshToken) => {
@@ -113,8 +112,7 @@ const sendDrafts = async () => {
     // call the python script to send the messages
 
     const { PythonShell } = require("python-shell");
-    let pyshell = new PythonShell(
-      "C:\\Users\\pushk\\React Projects\\primemailer\\backend\\routes\\python\\sendMails.py",
+    let pyshell = new PythonShell(process.env.SEND_MAILS_ROUTE,
       { mode: "text", pythonOptions: ["-u"] }
     );
 

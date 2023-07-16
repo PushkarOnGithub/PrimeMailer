@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Alert from "./Alert";
 
-const Signup = () => {
-  const host = "http://127.0.0.1:5000";
+const host = process.env.REACT_APP_SERVER_HOST;
+
+const Signup = () => { 
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",

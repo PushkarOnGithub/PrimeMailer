@@ -4,7 +4,9 @@ const {google} = require('googleapis');
 const Creds = require('../models/Creds')
 
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = "helloU$er";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+const host = process.env.REACT_APP_SERVER_HOST
 
 let oauth2Client = require('./oauth2Client.js');
 
@@ -76,7 +78,8 @@ router.get('/', async(req, res) => {
   let userInfo = await getUserProfile(tokens);
   console.log("userInfo : ", userInfo)
   if(!userInfo){
-    res.redirect(400, 'http://127.0.0.1:5000/signup')
+    // res.redirect(400, 'http://127.0.0.1:3000/signup')
+    res.redirect(400, `${host}/signup`)
     console.log('error in getting userInfo')
     return
   }
@@ -86,9 +89,11 @@ router.get('/', async(req, res) => {
 
   if(saved){
     const authToken= jwt.sign(userInfo.email, JWT_SECRET);
-    res.redirect(301, `http://127.0.0.1:5000/api/auth/signup/withgoogle/${authToken}`)}
+    // res.redirect(301, `http://127.0.0.1:5000/api/auth/signup/withgoogle/${authToken}`)}
+    res.redirect(301, `${host}/api/auth/signup/withgoogle/${authToken}`)}
     else{
-      res.redirect(400, 'http://127.0.0.1:5000/api/auth/signup')
+      // res.redirect(400, 'http://127.0.0.1:5000/api/auth/signup')
+      res.redirect(400, `${host}/api/auth/signup`);
       console.error('error in saving creds')
   }
 })

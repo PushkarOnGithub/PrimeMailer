@@ -6,8 +6,9 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { toast } from "react-toastify";
 import Alert from "./Alert";
 
+const host = process.env.REACT_APP_SERVER_HOST;
+
 const Composer = () => {
-  const host = "http://127.0.0.1:5000";
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -23,10 +24,10 @@ const Composer = () => {
   const handleSendMails = async () => {
     // add html data
     const rawHtmlData = ((convertToRaw(editorState.getCurrentContent()).blocks)[0]).text.split(" ");
-    if([... new Set(rawHtmlData)].length === 0){
+    if([...new Set(rawHtmlData)].length === 0){
       toast.error("Email Body Can not be Empty")
       return;
-    }else if([... new Set(rawHtmlData)].length < 5){
+    }else if([...new Set(rawHtmlData)].length < 5){
       toast.error("Email is too short");
       return;
     }

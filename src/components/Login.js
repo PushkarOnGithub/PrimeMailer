@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import Alert from "./Alert";
 import qs from 'querystring';
 
-const host = "http://127.0.0.1:5000";
+const host = process.env.REACT_APP_SERVER_HOST;
 
 const handleRedirectGoogle= async(payload, navigate) => {
   let response = await fetch(`${host}/api/auth/login/withgoogle`, {

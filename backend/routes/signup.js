@@ -6,7 +6,8 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const host = "http://127.0.0.1:3000";
+// const host = "http://127.0.0.1:3000";
+const host = process.env.REACT_APP_SERVER_HOST;
 const JWT_SECRET = "helloU$er";
 const { google } = require("googleapis");
 let oauth2Client = require("./oauth2Client.js");
@@ -47,8 +48,7 @@ router.post(
         // sending email by python containing an OTP
 
         const { PythonShell } = require("python-shell");
-        let pyshell = new PythonShell(
-          "C:\\Users\\pushk\\React Projects\\primemailer\\backend\\routes\\python\\SendOtpMail.py",
+        let pyshell = new PythonShell(process.env.SEND_OTP_MAIL_ROUTE,
           { mode: "text", pythonOptions: ["-u"] }
         );
 
