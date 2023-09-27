@@ -6,6 +6,7 @@ import ThemeState from "./contexts/themeState";
 import Home from "./components/Home";
 import Login from './components/Login'
 import Signup from "./components/Signup";
+import About from "./components/About"
 import NotFound from "./components/NotFound";
 import Footer from "./components/Footer";
 
@@ -20,6 +21,7 @@ function App() {
           <Route exact path='/' element={<Home/>}/>
           <Route exact path='/login' element={<Login/>}/>
           <Route exact path='/signup' element={<Signup/>}/>
+          <Route exact path='/about' element={<About/>}/>
           <Route path = "*" element = {<NotFound/>}/>
           </Routes>
           </div>
