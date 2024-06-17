@@ -1,33 +1,34 @@
 import React from "react";
 import "./App.css";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/navbar/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ThemeState from "./contexts/themeState";
-import Home from "./components/Home";
-import Login from './components/Login'
-import Signup from "./components/Signup";
-import About from "./components/About"
+import Composer from "./components/editor/Composer";
+import Login from './components/login/Login'
+import About from "./components/about/About"
 import NotFound from "./components/NotFound";
-import Footer from "./components/Footer";
+import Footer from "./components/footer/Footer";
+import Callback from "./components/google/Callback";
+import Mails from "./components/mails/Mails";
+// import Test from "../useless files/Test";
 
 function App() {
   return (
     <>
-    <ThemeState>
       <Router>
         <Navbar/>
         <div className="content" style={{ paddingBottom: '100px', flexGrow: 1, overflowY: 'auto' }}>
         <Routes>
-          <Route exact path='/' element={<Home/>}/>
+          <Route exact path='/' element={<Composer/>}/>
           <Route exact path='/login' element={<Login/>}/>
-          <Route exact path='/signup' element={<Signup/>}/>
           <Route exact path='/about' element={<About/>}/>
-          <Route path = "*" element = {<NotFound/>}/>
+          <Route exact path='/callback' element={<Callback/>}/>
+          <Route exact path='/mails' element={<Mails/>}/>
+          <Route path = "*" element = {<NotFound message="You might lost your way"/>}/>
+          {/* <Route exact path='/' element={<Test/>}/> */}
           </Routes>
           </div>
           <Footer/>
       </Router>
-    </ThemeState>
     </>
   );
 }
