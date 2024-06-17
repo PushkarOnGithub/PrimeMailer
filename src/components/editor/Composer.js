@@ -5,7 +5,6 @@ import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { toast } from "react-toastify";
 import Alert from "../alert/Alert";
-import { useNavigate } from "react-router-dom";
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 

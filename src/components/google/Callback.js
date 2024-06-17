@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { toast } from "react-toastify";
 import loading from "../assets/loading.gif";
 
@@ -8,7 +8,6 @@ const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 export default function Callback() {
 
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -33,8 +32,8 @@ export default function Callback() {
             console.log(res.authToken);
 
             // Redirect to a protected route or home page
-            navigate("/");
-            // window.location.href = '/';
+            // navigate("/");
+            window.location.href = '/';
             toast.success("Logged In Successfully", { theme: "colored" });
             await new Promise((r) => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
           }
@@ -45,7 +44,7 @@ export default function Callback() {
         } catch (error) {
           toast.error("Invalid Credentials");
           // Redirect to a login again
-          // window.location.href = '/login';
+          window.location.href = '/login';
           // navigate('/login');
           console.error('Error fetching tokens:', error);
           await new Promise((r) => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
