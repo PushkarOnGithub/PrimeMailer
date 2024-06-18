@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/oauth2/callback"
+  to = "/index.html"
+  status = 200
+  force = true
