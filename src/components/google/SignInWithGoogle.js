@@ -4,7 +4,7 @@ const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
 const SignInWithGoogle = (props) => {
 	const handleSignInWithGoogleClick = () => {
-		window.open(`${SERVER_HOST}/auth/google/login`, "_self");
+		window.open(`${SERVER_HOST}/auth/google/login`, "_blank");
 	}
 	return (
 		<>
