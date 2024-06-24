@@ -1,6 +1,20 @@
 [[redirects]]
-  from = "/*"
+  from = "/callback"
   to = "/index.html"
   status = 200
   force = true
-
+[[redirects]]
+  from = "/mails"
+  to = "/index.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/about"
+  to = "/index.html"
+  status = 200
+  force = true
+[[redirects]]
+  from = "/login"
+  to = "/index.html"
+  status = 200
+  force = true
