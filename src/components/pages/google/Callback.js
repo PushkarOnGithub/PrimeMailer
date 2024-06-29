@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from "react-toastify";
-import loading from "../assets/loading.gif";
+import loading from '../../assets/loading.gif';
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 

@@ -1,6 +1,6 @@
 import React from "react";
-import SignInWithGoogle from "../google/SignInWithGoogle";
-import Alert from "../alert/Alert";
+import SignInWithGoogle from "../../pages/google/SignInWithGoogle";
+import Alert from "../../alert/Alert";
 
 const Login = () => {
   return (

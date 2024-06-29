@@ -1,0 +1,79 @@
+.mail-card{
+    width: 300px;
+    height: 250px;
+    border: 2px solid #E4E4E4;
+    border-radius: 8px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: white;
+}
+.mail-card-info{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.mail-card-info .fa-user{
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: #A5A6AA;
+}
+.mail-card-user-info{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.mail-card-user-info .name{
+    color: #09090B;
+    font-weight: 600;
+}
+.mail-card-user-info .email{
+    color: #A5A6AA;
+    font-size: 12px;
+}
+.mail-card-user-info .date{
+    color: #A5A6AA;
+    font-size: 12px;
+}
+
+.mail-card-email-content{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+.mail-card-email-content .subject{
+    color: #09090B;
+    font-weight: 600;
+}
+.mail-card-email-content .body{
+    color: #A5A6AA;
+    font-size: 12px;
+}
+
+
+.mail-card-delivery-status{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+}
+.mail-card-delivery-status span{
+    color: #A5A6AA;
+}
+.mail-card-delivery-status .delivered{
+    padding: 5px;
+    border-radius: 5px;
+    background-color: #23C55E;
+    color: white;
+}
+.mail-card-delivery-status .pending{
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgb(221, 93, 38);
+    color: white;
+}
