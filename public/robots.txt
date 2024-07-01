@@ -1,4 +1,4 @@
+# Allow all URLs (see https://www.robotstxt.org/robotstxt.html)
 User-agent: *
-Allow: /
-
-Sitemap: https://www.pushkarsaini.me
+Disallow:
+Sitemap: https://pushkarsaini.me/sitemap.xml
