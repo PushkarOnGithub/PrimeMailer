@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import SimpleModal from "../modal/SimpleModal";
 
-
 export default function Navbar() {
   useEffect(() => {
     const sidebar = document.getElementById("sidebar");
@@ -37,7 +36,7 @@ export default function Navbar() {
 
   return (
     <>
-      <SimpleModal handleLogoutConfirm={handleLogoutConfirm}/>
+      <SimpleModal handleLogoutConfirm={handleLogoutConfirm} />
       <header className="header">
         <nav className="navbar">
           <div className="nav-logo">
@@ -72,11 +71,17 @@ export default function Navbar() {
               </li>
             </ul>
           </div>
-          <div className="nav-user-logo nav-list-item">
-            <Link className="nav-list-item-link" to="/login">
-              <i className="fa-regular fa-user"></i>
-            </Link>
-          </div>
+          {isLoggedIn() ? (
+            <button className="nav-list-item simple-modal-open-button" style={{border:"none"}}>
+              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+          ) : (
+            <div className="nav-user-logo nav-list-item">
+              <Link className="nav-list-item-link" to="/login">
+              <i class="fa-solid fa-user-plus"></i>
+              </Link>
+            </div>
+          )}
           <div className="nav-toggle-button">
             <button id="toggle-sidebar">
               <i className="fa-solid fa-bars"></i>
@@ -120,11 +125,12 @@ export default function Navbar() {
             </Link>
           </li>
         </ul>
-        {isLoggedIn()&&(<button
-          className="sidebar-logout-button nav-list-item simple-modal-open-button">
-          <i className="fa-solid fa-person-through-window"></i>
-          Logout
-        </button>)}
+        {isLoggedIn() && (
+          <button className="sidebar-logout-button nav-list-item simple-modal-open-button">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            Logout
+          </button>
+        )}
       </div>
     </>
   );
