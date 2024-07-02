@@ -3,18 +3,18 @@
     /* background-color: rgba(0,0,0,0.2); */
     width: 100vw;
     height: 100vh;
-    top: -1000px;
+    top: -3000px;
     z-index: 5;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 1s ease-in-out;
 }
 .modal.hidden{
-    transform: translateY(-1000px);
+    transform: translateY(-3000px);
 }
 .modal.show{
-    transform: translateY(1000px);
+    transform: translateY(3000px);
 }
 .modal-content{
     background-color: whitesmoke;

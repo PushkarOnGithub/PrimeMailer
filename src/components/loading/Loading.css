@@ -1,0 +1,7 @@
+.loading {
+  position: fixed;
+  height: 100px;
+  width: 100px;
+  top: 45vh;
+  left: 48vw;
+}

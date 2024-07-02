@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from "react-toastify";
-import loading from '../../assets/loading.gif';
+import Loading from '../../loading/Loading';
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
@@ -13,7 +13,7 @@ export default function Callback() {
     const fetchTokens = async () => {
       const query = new URLSearchParams(location.search);
       const code = query.get('code');
-      console.log(code);
+      // console.log(code);
       if (code) {
         try {
           let res = await fetch(`${SERVER_HOST}/auth/google/callback`, {
@@ -55,6 +55,6 @@ export default function Callback() {
     fetchTokens();
   }, [location.search]);
 
-  return <><img src={loading} alt="loading" style={{height: '100px' ,width: '100px', position: 'fixed', top:'45vh', left:'48vw'}}  /></>;
+  return <> <Loading/> </>;
 };
 
