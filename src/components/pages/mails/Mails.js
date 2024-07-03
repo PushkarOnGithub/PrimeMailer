@@ -5,10 +5,12 @@ import "./Mails.css";
 import useFetchData from "../../../hooks/useFetchData";
 import Loading from "../../loading/Loading";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const REACT_APP_SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
 export default function Mails() {
+  const navigate = useNavigate();
   const options = {
     method: "GET",
     headers: {
@@ -25,6 +27,7 @@ export default function Mails() {
     return <Loading />;
   }
   if (error) {
+    navigate("/")
     toast.error(error);
     return;
   }

@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import "./modal.css";
 
-export default function FileInputModal({ setcsvFile, handleSendMails }) {
+export default function FileInputModal({
+  setcsvFile,
+  handleSendMails,
+  setEmailList,
+}) {
   useEffect(() => {
     const openButtons = document.querySelectorAll(
       ".file-input-modal-open-button"
@@ -58,6 +62,9 @@ export default function FileInputModal({ setcsvFile, handleSendMails }) {
               className="modal-text-input"
               type="email"
               placeholder="Enter Emails separated by comma(,)"
+              onChange={(e) => {
+                setEmailList(e.target.value);
+              }}
             />
             <h6>OR</h6>
             <div className="modal-file-input">

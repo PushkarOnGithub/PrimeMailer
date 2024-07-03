@@ -12,7 +12,7 @@ const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
 const Composer = () => {
   const [subject, setSubject] = useState("");
-
+  const [emailList, setEmailList] = useState("");
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -26,35 +26,40 @@ const Composer = () => {
   // }, [csvFile]);
 
   const handleSendMails = async () => {
+    if(!localStorage.getItem("authToken")){
+      toast.error("You Have To Login First");
+      return;
+    }
+    if(subject === ""){
+      toast.error("Subject Cannot be empty");
+      return;
+    }
+    // add csv csvFile
+    if (!csvFile && emailList === "" && emailList.length<10) {
+      toast.error("Please Enter/Select Recipients");
+      return;
+    } else if (csvFile && csvFile.size > 1024 * 1024) {
+      toast.error("File Size Exceeded (1MB)");
+      return;
+    }
     // add html data
     const rawHtmlData = convertToRaw(
       editorState.getCurrentContent()
     ).blocks[0].text.split(" ");
-    if ([...new Set(rawHtmlData)].length === 0) {
-      toast.error("Email Body Can not be Empty");
-      return;
-    } else if ([...new Set(rawHtmlData)].length < 5) {
+    if ([...new Set(rawHtmlData)].length < 5) {
       toast.error("Email is too short");
       return;
     }
-
-    // add csv csvFile
-    if (!csvFile) {
-      toast.error("Please select the recipient File");
-      return;
-    } else if (csvFile.size > 1024 * 1024) {
-      toast.error("File Size Exceeded");
-      return;
-    }
-    // if both html and csv are of required types save it as a form
     const htmlData = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     // console.log(typeof(htmlData));
-
+    
+    // if subject, emailList and csv are of required types save it as a form
     const formData = new FormData();
     formData.append("subject", subject);
     formData.append("html", htmlData);
     formData.append("csv", csvFile);
-    // console.log(formData)
+    formData.append("emailList", emailList);
+    console.log(emailList)
     const options = {
       method: "POST",
       body: formData,
@@ -64,8 +69,14 @@ const Composer = () => {
     };
 
     try {
-      await fetch(`${SERVER_HOST}/mails/schedule`, options);
-      window.location.reload();
+      let res = await fetch(`${SERVER_HOST}/mails/schedule`, options);
+      res = await res.json()
+      if(res.success){
+        toast.success("In Queue");
+        window.location.reload();
+      }else{
+        toast.error(res.message);
+      }
     } catch {
       toast.error("Please Connect to the Internet");
     }
@@ -76,6 +87,7 @@ const Composer = () => {
       <FileInputModal
         setcsvFile={setcsvFile}
         handleSendMails={handleSendMails}
+        setEmailList={setEmailList}
       />
       <SubjectModal setSubject={setSubject} />
       <div className="composer">

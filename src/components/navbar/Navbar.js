@@ -73,12 +73,12 @@ export default function Navbar() {
           </div>
           {isLoggedIn() ? (
             <button className="nav-list-item simple-modal-open-button" style={{border:"none"}}>
-              <i class="fa-solid fa-arrow-right-to-bracket"></i>
+              <i className="fa-solid fa-arrow-right-to-bracket"></i>
             </button>
           ) : (
             <div className="nav-user-logo nav-list-item">
               <Link className="nav-list-item-link" to="/login">
-              <i class="fa-solid fa-user-plus"></i>
+              <i className="fa-solid fa-user-plus"></i>
               </Link>
             </div>
           )}
@@ -127,7 +127,7 @@ export default function Navbar() {
         </ul>
         {isLoggedIn() && (
           <button className="sidebar-logout-button nav-list-item simple-modal-open-button">
-            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <i className="fa-solid fa-arrow-right-to-bracket"></i>
             Logout
           </button>
         )}

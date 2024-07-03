@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from "react-toastify";
 import Loading from '../../loading/Loading';
 
@@ -8,6 +8,7 @@ const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 export default function Callback() {
 
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -28,14 +29,12 @@ export default function Callback() {
             localStorage.setItem("authToken", res.authToken);
             localStorage.setItem("name", res.name);
             localStorage.setItem("picture", res.picture);
-            console.log("Login");
-            console.log(res.authToken);
+            // console.log("Login");
+            // console.log(res.authToken);
 
             // Redirect to a protected route or home page
-            // navigate("/");
-            window.location.href = '/';
+            navigate("/");
             toast.success("Logged In Successfully", { theme: "colored" });
-            await new Promise((r) => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
           }
           else {
             throw new Error("Unable to Login");
@@ -44,16 +43,14 @@ export default function Callback() {
         } catch (error) {
           toast.error("Invalid Credentials");
           // Redirect to a login again
-          window.location.href = '/login';
-          // navigate('/login');
+          navigate('/login');
           console.error('Error fetching tokens:', error);
-          await new Promise((r) => setTimeout(r, 3000)); // sleep for 3 seconds so that the alert can be seen
         }
       }
     };
 
     fetchTokens();
-  }, [location.search]);
+  }, [location.search, navigate]);
 
   return <> <Loading/> </>;
 };
