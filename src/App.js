@@ -8,6 +8,7 @@ import NotFound from "./components/pages/notfound/NotFound";
 import Callback from "./components/pages/google/Callback";
 import Mails from "./components/pages/mails/Mails";
 import Layout from "./components/Layout/Layout";
+import Home from "./components/pages/home/Home";
 
 function App() {
   return (
@@ -16,7 +17,8 @@ function App() {
         <Layout>
         <div className="content">
         <Routes>
-          <Route exact path='/' element={<Composer/>}/>
+          <Route exact path='/' element={<Home/>}/>
+          <Route exact path='/home' element={<Home/>}/>
           <Route exact path='/compose' element={<Composer/>}/>
           <Route exact path='/login' element={<Login/>}/>
           <Route exact path='/about' element={<About/>}/>

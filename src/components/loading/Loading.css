@@ -1,7 +1,11 @@
-.loading {
+.loading-container{
   position: fixed;
+  text-align: center;
+  top: 40%;
+  height: 100px;
+  width: 100%;
+}
+.loading {
   height: 100px;
   width: 100px;
-  top: 45vh;
-  left: 48vw;
 }

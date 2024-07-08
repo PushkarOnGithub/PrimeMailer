@@ -1,0 +1,129 @@
+.home-container{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+}
+/* relative flex size-full min-h-screen flex-col bg-slate-50 group/design-root overflow-x-hidden */
+.hero-section{
+    padding: 1rem;
+}
+.hero-section-wrapper{
+    height: 480px;
+    padding: 4px;
+}
+.hero-background-image{
+    border-radius: 15px;
+    color: white;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding: 0 2.5rem 2.5rem 2.5rem;
+    /* background-image: linear-gradient(rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0.4) 100%), url("https://themesation.com/wp-content/uploads/2023/05/writing-article-service-1536x900.png"); */
+}
+/* flex min-h-[480px] flex-col gap-6 bg-cover bg-center bg-no-repeat @[480px]:gap-8 @[480px]:rounded-xl items-start justify-end px-4 pb-10 @[480px]:px-10 */
+.hero-background-image .info{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+/* flex flex-col gap-2 text-left */
+.hero-background-image .info .primary-info{
+    font-size: clamp(1.5rem, 8vw - 2rem, 3rem);
+    font-weight: 1000;
+    margin: 0;
+}
+/* text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[500px]:leading-tight @[480px]:tracking-[-0.033em] */
+.hero-background-image.info.secondary-info{
+    font-size: clamp(0.75rem, 4vw - 1rem, 1.5rem);
+    font-weight: 700;
+    margin: 0;
+}
+/* text-white text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal */
+
+.hero-background-image .welcome-button{
+    color: white;
+    font-size: 1rem;
+    font-weight: 700;
+    min-width: 94px;
+    min-height: 48px;
+    padding: 0 20px;
+    cursor: pointer;
+    border-radius: 12px;
+    background-color: #0580fc;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: none;
+}
+/* flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-[#2589f4] text-slate-50 text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] */
+
+.features-section{
+    margin: 3rem;
+}
+.features-desc-wrapper{
+    display: flex;
+    justify-content: center;
+}
+.features-desc{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 90%;
+}
+.features-desc .title{
+    font-size: clamp(1.5rem, 8vw - 2rem, 3rem);
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+.features-desc .subtitle{
+    color: #7D758D;
+    font-size: clamp(0.75rem, 4vw - 1rem, 1.5rem);
+}
+.features-container {
+    margin-top: 2rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.feature {
+    margin-bottom: 5vw;
+    background-color: #F4F4F5;
+    border-radius: 10px;
+    padding: 20px;
+    width: 325px;
+    height: 225px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 300ms;
+}
+.feature:hover{
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+.feature img {
+    width: 50px;
+}
+.feature h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.feature p {
+    font-size: 16px;
+    color: #666;
+}
