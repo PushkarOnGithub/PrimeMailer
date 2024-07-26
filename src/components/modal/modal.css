@@ -42,6 +42,10 @@
     font-size: 4rem;
     color:darkcyan;
 }
+.fa-paperclip{
+    font-size: 4rem;
+    color:darkcyan;
+}
 .modal-input{
     display: flex;
     flex-direction: column;
@@ -49,8 +53,9 @@
 }
 .modal-text-input{
     height: 100%;
-    width: 260px;
+    width: 265px;
     padding: 5px;
+    text-indent: 5px;
 }
 
 .modal-file-input input{

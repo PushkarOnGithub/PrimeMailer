@@ -7,12 +7,13 @@ import { toast } from "react-toastify";
 import "./Composer.css";
 import FileInputModal from "../modal/FileInputModal";
 import SubjectModal from "../modal/SubjectModal";
+import AttachmentModal from "../modal/AttachmentModal";
 
 const SERVER_HOST = process.env.REACT_APP_SERVER_HOST;
 
 const Composer = () => {
-  const [subject, setSubject] = useState("");
-  const [emailList, setEmailList] = useState("");
+  const [subject, setSubject] = useState(null);
+  const [emailList, setEmailList] = useState(null);
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
@@ -20,6 +21,7 @@ const Composer = () => {
     setEditorState(state);
   };
   const [csvFile, setcsvFile] = useState(null);
+  const [attFile, setAttFile] = useState(null);
 
   // useEffect(() => {
   //   console.log(csvFile);
@@ -41,6 +43,9 @@ const Composer = () => {
     } else if (csvFile && csvFile.size > 1024 * 1024) {
       toast.error("File Size Exceeded (1MB)");
       return;
+    } else if (attFile && attFile.size > 2 * 1024 * 1024) {
+      toast.error("Attachment File Size Exceeded (2MB)");
+      return;
     }
     // add html data
     const rawHtmlData = convertToRaw(
@@ -58,6 +63,7 @@ const Composer = () => {
     formData.append("subject", subject);
     formData.append("html", htmlData);
     formData.append("csv", csvFile);
+    formData.append("att", attFile);
     formData.append("emailList", emailList);
     console.log(emailList)
     const options = {
@@ -90,6 +96,7 @@ const Composer = () => {
         setEmailList={setEmailList}
       />
       <SubjectModal setSubject={setSubject} />
+      <AttachmentModal setAttFile={setAttFile}/>
       <div className="composer">
         <h3>Write Your Mail Here</h3>
         <div className="editor">

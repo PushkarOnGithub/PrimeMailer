@@ -55,14 +55,14 @@ export default function SubjectModal({setSubject}) {
               onChange={(e) => {
                 setSubject(e.target.value);
               }}
-              placeholder=" Enter Subject of the Mail "
+              placeholder="Enter Subject of the Mail "
             />
           </div>
           <div className="modal-buttons">
             <button className="modal-button modal-button-close subject-modal-close-button">
               Close
             </button>
-            <button className="modal-button modal-button-continue subject-modal-close-button file-input-modal-open-button">
+            <button className="modal-button modal-button-continue subject-modal-close-button att-input-modal-open-button">
               Next
             </button>
           </div>
