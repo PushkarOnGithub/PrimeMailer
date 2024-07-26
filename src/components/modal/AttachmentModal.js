@@ -46,9 +46,9 @@ export default function AttachmentModal({
 
   return (
     <>
-      <button className="modal-button att-input-modal-open-button">
+      {/* <button className="modal-button att-input-modal-open-button">
         Open Attachment Input
-      </button>
+      </button> */}
       <div className="modal" id="att-input-modal">
         <div className="modal-content" id="att-input-modal-content">
           <div className="modal-message">
