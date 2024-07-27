@@ -62,8 +62,8 @@ const Composer = () => {
     const formData = new FormData();
     formData.append("subject", subject);
     formData.append("html", htmlData);
-    formData.append("csv", csvFile);
-    formData.append("att", attFile);
+    formData.append("csvFile", csvFile);
+    formData.append("attFile", attFile);
     formData.append("emailList", emailList);
     console.log(emailList)
     const options = {
